@@ -2,23 +2,17 @@ package it.polito.tdp.genes.model;
 
 public class Evento implements Comparable<Evento>{
 	
-	private int t;
-	private Genes genes;
-	private int nIng;
+	private int t;  //tempo da 0 a 36
+	private int nIng;  //numero ingegnere
 	
-	public Evento(int t, Genes genes, int nIng) {
+	
+	
+	public Evento(int t, int nIng) {
 		super();
 		this.t = t;
-		this.genes = genes;
 		this.nIng = nIng;
 	}
 
-
-	@Override
-	public int compareTo(Evento o) {
-		// TODO Auto-generated method stub
-		return this.t-o.t;
-	}
 
 
 	public int getT() {
@@ -26,23 +20,11 @@ public class Evento implements Comparable<Evento>{
 	}
 
 
+
 	public void setT(int t) {
 		this.t = t;
 	}
 
-
-	public Genes getGenes() {
-		return genes;
-	}
-
-
-	public void setGenes(Genes genes) {
-		this.genes = genes;
-	}
-	
-	public void nIngMeno1() {
-		this.nIng=this.nIng-1;
-	}
 
 
 	public int getnIng() {
@@ -50,8 +32,13 @@ public class Evento implements Comparable<Evento>{
 	}
 
 
+
 	public void setnIng(int nIng) {
 		this.nIng = nIng;
 	}
 
+	@Override
+	public int compareTo(Evento other) {
+		return this.t-other.t ;
+	}
 }

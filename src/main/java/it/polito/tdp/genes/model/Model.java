@@ -102,4 +102,15 @@ public class Model {
 		
 	}
 	
+	public Map<Genes, Integer> simulaIngegneri(Genes start, int n){
+		try {
+			Simulatore sim = new Simulatore(start, n, grafo);
+			sim.run();
+			return sim.getGeniStudiati();
+		}catch (IllegalArgumentException ex) {
+			return null;
+		}
+		
+	}
+	
 }

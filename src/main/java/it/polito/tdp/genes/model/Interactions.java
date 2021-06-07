@@ -1,6 +1,6 @@
 package it.polito.tdp.genes.model;
 
-public class Interactions {  //è come adiacense ma usa oggetti Genes
+public class Interactions {  //è come adiacenza ma usa oggetti Genes
 
 	private Genes gene1;
 	private Genes gene2;

@@ -97,7 +97,17 @@ public class FXMLController {
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	Genes start = this.cmbGeni.getValue();
+    	int n = Integer.parseInt(txtIng.getText());
+    	Map<Genes, Integer> studiati = model.simulaIngegneri(start, n);
+    	if(studiati ==null) {
+    		txtResult.appendText("ERRORE: il gene selezionato è isolato \n");
+    	}else {
+    		txtResult.appendText("Risultato simulazione\n");
+    		for(Genes g: studiati.keySet()) {
+    			txtResult.appendText(g+" "+studiati.get(g)+"\n");
+    		}
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
