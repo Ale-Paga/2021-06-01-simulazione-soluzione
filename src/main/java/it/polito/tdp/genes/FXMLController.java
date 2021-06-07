@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.genes.model.Adiacente;
 import it.polito.tdp.genes.model.Adiacenza;
 import it.polito.tdp.genes.model.Genes;
 import it.polito.tdp.genes.model.Model;
@@ -54,6 +55,9 @@ public class FXMLController {
     		this.txtResult.appendText("Grafo creato \n");
     		this.txtResult.appendText("Vertici: "+model.getNVertici()+"\n");
     		this.txtResult.appendText("Archi: "+model.getNArchi()+"\n");
+    		this.txtResult.appendText("\n");
+
+    		this.cmbGeni.getItems().clear();
     		this.cmbGeni.getItems().addAll(model.getVertici());
     	}catch(RuntimeException e) {
     		this.txtResult.setText("Errore: "+e+"\n");
@@ -71,13 +75,19 @@ public class FXMLController {
     			return;
     		}
     		
-    		List<Adiacenza> adiacenti = model.geniAdiacenti(g);
-    		
+    		List<Adiacente> adiacenti = model.geniAdiacenti(g);
     		this.txtResult.appendText("Geni adiacenti a: "+g.getGeneId()+"\n");
-    		for(Adiacenza a: adiacenti) {
-    			this.txtResult.appendText(a.getGeneID2()+"  "+a.getPeso()+"\n");
+    		
+    		if(adiacenti.size()==0) {
+    			this.txtResult.appendText("NESSUNO\n\n");
+    		}else {	
+        		for(Adiacente a: adiacenti) {
+        			this.txtResult.appendText(a.getGene()+"  "+a.getPeso()+"\n");
+        		}
+        		this.txtResult.appendText("\n");
     		}
-    		this.txtResult.appendText("\n\n");
+    		
+    		
     	}catch(RuntimeException e) {
     		this.txtResult.setText("Errore: "+e+"\n");
     		return;

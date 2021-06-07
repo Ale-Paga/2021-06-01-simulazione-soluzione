@@ -19,8 +19,9 @@ public class Model {
 	private Graph<Genes, DefaultWeightedEdge> grafo;
 	private GenesDao dao;
 	private Map<String, Genes> idMap;
-	private List<Genes> vertici;
-	private List<Adiacenza> archi;
+	private List<Genes> essentialGenes;
+	//private List<Adiacenza> archi;
+	private List<Interactions> archi;
 	
 	public Model() {
 	 this.dao = new GenesDao();
@@ -29,17 +30,18 @@ public class Model {
 	
 	public void creaGrafo() {
 		grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-		vertici = dao.getEssentialGenes();
-		for(Genes g: vertici) {
+		essentialGenes = dao.getEssentialGenes();
+		for(Genes g: essentialGenes) {
 			this.idMap.put(g.getGeneId(), g);
 		}
 		//aggiungere i vertici
-		Graphs.addAllVertices(grafo, vertici);
+		Graphs.addAllVertices(grafo, essentialGenes);
 		
 		//aggiungere archi
-		archi = dao.getAdiacenze();
+		//archi = dao.getAdiacenze();
+		archi = dao.getInteractions(idMap);
 		
-		for(Adiacenza a: archi) {
+		/*for(Adiacenza a: archi) {
 			if( idMap.containsKey(a.getGeneID1()) && idMap.containsKey(a.getGeneID2()) ) {
 				Genes g1 = idMap.get(a.getGeneID1());
 				Genes g2 = idMap.get(a.getGeneID2());
@@ -51,7 +53,17 @@ public class Model {
 				}
 			}
 			
+		}*/
+		
+		for(Interactions arco: archi) {
+			if(arco.getGene1().getChromosome() == arco.getGene2().getChromosome()) {
+				Graphs.addEdge(this.grafo, arco.getGene1(), arco.getGene2(), Math.abs(arco.getExpressionCorr()*2.0));
+			}else {
+				Graphs.addEdge(this.grafo, arco.getGene1(), arco.getGene2(), Math.abs(arco.getExpressionCorr()));
+			}
+			
 		}
+		
 	}
 	
 	public int getNVertici() {
@@ -66,12 +78,24 @@ public class Model {
 		return grafo.vertexSet();
 	}
 	
-	public List<Adiacenza> geniAdiacenti(Genes g){
+	/*public List<Adiacenza> geniAdiacenti(Genes g){
 		Set<DefaultWeightedEdge> adiac= grafo.outgoingEdgesOf(g);
+		Set<DefaultWeightedEdge> adiac= grafo.EdgesOf(g); meglio questo
 		
 		List<Adiacenza> result = new ArrayList<Adiacenza>();
 		for(DefaultWeightedEdge d: adiac) {
 			result.add(new Adiacenza(g.getGeneId(), Graphs.getOppositeVertex(grafo, d, g).getGeneId(), grafo.getEdgeWeight(d)));
+		}
+		Collections.sort(result);
+		return result;
+		
+	}*/
+	public List<Adiacente> geniAdiacenti(Genes g){
+		List<Genes> vicini = Graphs.neighborListOf(this.grafo, g);
+		
+		List<Adiacente> result = new ArrayList<Adiacente>();
+		for(Genes v: vicini) {
+			result.add(new Adiacente(v, this.grafo.getEdgeWeight(this.grafo.getEdge(g, v))));
 		}
 		Collections.sort(result);
 		return result;
